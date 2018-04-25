@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1A25B16920910502009A3E37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A25B16820910502009A3E37 /* main.cpp */; };
+		1A25B1712091050B009A3E37 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A25B1702091050B009A3E37 /* GLUT.framework */; };
+		1A25B17320910511009A3E37 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A25B17220910511009A3E37 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,9 @@
 /* Begin PBXFileReference section */
 		1A25B16520910502009A3E37 /* 3DGraphMap_Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 3DGraphMap_Project; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A25B16820910502009A3E37 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		1A25B1702091050B009A3E37 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		1A25B17220910511009A3E37 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		1A25B17420910522009A3E37 /* world-map.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = "world-map.bmp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +37,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A25B17320910511009A3E37 /* OpenGL.framework in Frameworks */,
+				1A25B1712091050B009A3E37 /* GLUT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +50,7 @@
 			children = (
 				1A25B16720910502009A3E37 /* 3DGraphMap_Project */,
 				1A25B16620910502009A3E37 /* Products */,
+				1A25B16F2091050B009A3E37 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +65,19 @@
 		1A25B16720910502009A3E37 /* 3DGraphMap_Project */ = {
 			isa = PBXGroup;
 			children = (
+				1A25B17420910522009A3E37 /* world-map.bmp */,
 				1A25B16820910502009A3E37 /* main.cpp */,
 			);
 			path = 3DGraphMap_Project;
+			sourceTree = "<group>";
+		};
+		1A25B16F2091050B009A3E37 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1A25B17220910511009A3E37 /* OpenGL.framework */,
+				1A25B1702091050B009A3E37 /* GLUT.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
