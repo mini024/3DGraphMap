@@ -3,18 +3,43 @@
 //  3DGrpahMap_Project
 //
 //  Created by Jessica M Cavazos Erhard on 4/11/18.
-//  Copyright © 2018 Jessica M Cavazos Erhard. All rights reserved.
+//  Copyright © 2018
+//  Jessica M Cavazos Erhard.
+//  José Antonio Ruiz del Moral Cervantes
+//  All rights reserved.
+//
 //
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
-
-#ifdef __APPLE__
+#include <stdlib.h>
+#include <OpenGL/gl.h>
 #include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+#include <math.h>
+#include <sys/time.h>
+
+#include "imgui.h"
+#include "imgui_impl_glut.h"
+
+void DoGUI();
+
+// GLobal Variables
+float diffuseColor[] = {1.0f, 0.0f, 0.0f, 1.0f};
+float lightDirection[] = {2.0f, 2.0f, 2.0f, 1.0f};
+float eyePos[] = {-11.0f, 8.0f, -7.0f};
+float target[] = {0.0f, 0.0f, 0.0f};
+bool rotateModel = false;
+float attenC = 1.0f;
+float attenL = 0.0f;
+float attenQ = 0.0f;
+
+bool planeVisible = true;
+float planeScale[] = {10.0f, 1.0f, 10.0f};
+float planeTranslate[] = {0.0f, 0.0f, 0.0f};
+
+bool sphereVisible = true;
+float sphereScale[] = {1.0f, 1.0f, 1.0f};
+float sphereTranslate[] = {0.0f, 3.0f, 0.0f};
+
 
 // angle of rotation for the camera direction
 float angle = 0.0f;
@@ -174,6 +199,50 @@ GLuint LoadTexture( const char * filename )
     return texture;
 }
 
+void DoGui(){
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize |
+    ImGuiWindowFlags_NoCollapse |
+    ImGuiWindowFlags_NoMove;
+    glDisable(GL_LIGHTING);
+    ImGui_ImplGLUT_NewFrame((int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y, 1.0f / 60.0f);
+    
+    static bool showLightConfig = true;
+    static bool showAppConfig = true;
+    static bool firstRun = true;
+    
+    if (firstRun) {
+        ImGui::SetNextWindowPos(ImVec2(10, 10));
+        ImGui::SetNextWindowSize(ImVec2(330,120));
+    }
+    ImGui::Begin("Camera", &showLightConfig, window_flags);
+    ImGui::DragFloat3("Eye Position", eyePos, 0.25f);
+    ImGui::DragFloat3("Target", target, 0.25f);
+    ImGui::Checkbox("Rotate View", &rotateModel);
+    ImGui::End();
+    
+    if (firstRun) {
+        ImGui::SetNextWindowPos(ImVec2(670,10));
+        ImGui::SetNextWindowSize(ImVec2(120,80));
+    }
+    ImGui::Begin("Application", &showAppConfig, window_flags);
+    
+    if (ImGui::Button("Quit")) {
+        exit(0);
+    }
+    if (ImGui::Button("Reset")) {
+        exit(0);
+    }
+    ImGui::End();
+    
+    
+    glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
+    ImGui::Render();
+    glEnable(GL_LIGHTING);
+    firstRun = false;
+    
+    
+}
+
 void renderScene(void) {
     
     if (deltaMove)
@@ -222,6 +291,7 @@ void renderScene(void) {
             glPopMatrix();
         }
     
+    DoGUI();
     glutSwapBuffers();
 }
 
@@ -248,13 +318,19 @@ void releaseKey(int key, int x, int y) {
     }
 }
 
+//Global Variables
+static int glutWindowId = 0;
+
+
 int main(int argc, char **argv) {
     // init GLUT and create window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(320,320);
+    glutInitWindowSize(800,600);
     glutCreateWindow("Lighthouse3D - GLUT Tutorial");
+    
+    glutWindowId = glutGetWindow();
     
     // register callbacks
     glutDisplayFunc(renderScene);
@@ -275,3 +351,5 @@ int main(int argc, char **argv) {
     
     return 1;
 }
+
+
