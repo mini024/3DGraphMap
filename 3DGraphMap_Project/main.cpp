@@ -16,6 +16,8 @@
 #include <GLUT/glut.h>
 #include <math.h>
 #include <sys/time.h>
+#include "Planet.h"
+#include "SOIL.h"
 
 #include "imgui.h"
 #include "imgui_impl_glut.h"
@@ -52,6 +54,9 @@ float x=0.0f, z=5.0f, y= 0.0f;
 float deltaAngle = 0.0f;
 float deltaMove = 0;
 float deltaMoveY = 0;
+
+// Image
+GLuint texture;
 
 void changeSize(int w, int h) {
     
@@ -155,7 +160,7 @@ void computeDir(float deltaAngle) {
 
 GLuint LoadTexture( const char * filename )
 {
-    int width, height;
+    unsigned long width, height;
     
     unsigned char * data;
     
@@ -163,43 +168,54 @@ GLuint LoadTexture( const char * filename )
     
     file = fopen( filename, "rb" );
     
-    if ( file == NULL ) return 0;
-    width = 1200;
-    height = 715;
-    data = (unsigned char *)malloc( width * height * 3 );
-    //int size = fseek(file,);
-    fread( data, width * height * 3, 1, file );
-    fclose( file );
-    
-    for(int i = 0; i < width * height ; ++i)
-    {
-        int index = i*3;
-        unsigned char B,R;
-        B = data[index];
-        R = data[index+2];
-        
-        data[index] = R;
-        data[index+2] = B;
+    if ( file == NULL ) {
+        printf("HEllo");
+        return 0;
     }
     
-    GLuint texture;
+    // allocate buffer
+    data = (unsigned char*) malloc(width * height * 4);
+    
+    //read texture data
+    fread(data, width * height * 4, 1, file);
+    fclose(file);
+    
+    
+    texture = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
+    (
+     "/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world-map.jpg",
+     SOIL_LOAD_AUTO,
+     SOIL_CREATE_NEW_ID,
+     SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+     );
+    
+    
+    // check for an error during the load process
+    if(texture == 0)
+    {
+        //printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+    }
     
     glGenTextures( 1, &texture );
     glBindTexture( GL_TEXTURE_2D, texture );
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST );
     
+    // The next commands sets the texture parameters
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // If the u,v coordinates overflow the range 0,1 the image is repeated
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // The magnification function ("linear" produces better results)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); //The minifying function
     
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_REPEAT );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_REPEAT );
-    gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,GL_RGB, GL_UNSIGNED_BYTE, data );
-    free( data );
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    
+    glTexImage2D( GL_TEXTURE_2D,0, 3, width, height,0,GL_RGB, GL_UNSIGNED_BYTE, data );
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+    
+    free(data);
     
     return texture;
 }
 
-void DoGui(){
+void DoGUI(){
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize |
     ImGuiWindowFlags_NoCollapse |
     ImGuiWindowFlags_NoMove;
@@ -239,9 +255,8 @@ void DoGui(){
     ImGui::Render();
     glEnable(GL_LIGHTING);
     firstRun = false;
-    
-    
 }
+
 
 void renderScene(void) {
     
@@ -263,15 +278,7 @@ void renderScene(void) {
               0.0f, 1.0f,  0.0f);
     glRotatef(90, 1.0, 0.0, 0.0);
     
-    // Image
-    GLuint texture;
-    // Agregar path completo de imagen.
-    texture = LoadTexture("~/3DGraphMap_Project/3DGraphMap_Project/world-map.bmp");
-    glBindTexture (GL_TEXTURE_2D, texture);
-    glEnable(GL_TEXTURE_2D);
-    
     // Draw ground
-    
     glColor3f(0.9f, 0.9f, 0.9f);
     glBegin(GL_QUADS);
     glVertex3f(-100.0f, 0.0f, -100.0f);
@@ -279,7 +286,36 @@ void renderScene(void) {
     glVertex3f( 100.0f, 0.0f,  100.0f);
     glVertex3f( 100.0f, 0.0f, -100.0f);
     glEnd();
-    glDisable(GL_TEXTURE_2D);
+    
+    glBindTexture (GL_TEXTURE_2D, texture);
+//    glEnable(GL_TEXTURE_2D);
+//    glEnable(GL_TEXTURE_GEN_S);
+//    glEnable(GL_TEXTURE_GEN_T);
+//
+//    // Draw Sphere
+//    glPushMatrix();
+//    glTranslated(-2.4,1.2,-6);
+//    glutSolidSphere(1,16,16);
+//    glPopMatrix();
+//    glDisable(GL_TEXTURE_2D);
+
+//    // variable to store planet (global)
+//    Planet earth;
+//
+//    // init after OpenGL initialisation
+//    earth.init(1.0,"/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world_map.bmp");
+//
+//    // position update
+//    earth.x0=  0.0;
+//    earth.y0=  0.0;
+//    earth.z0=-10.0;
+//
+//    // add this to render loop
+//    earth.draw(); // draws the planet
+//    earth.t+=2.5; // just rotate planet by 2.5 deg each frame...
+
+    
+    
     
     // Draw Cubes
     
@@ -291,7 +327,7 @@ void renderScene(void) {
             glPopMatrix();
         }
     
-    DoGUI();
+    //DoGUI();
     glutSwapBuffers();
 }
 
@@ -331,6 +367,9 @@ int main(int argc, char **argv) {
     glutCreateWindow("Lighthouse3D - GLUT Tutorial");
     
     glutWindowId = glutGetWindow();
+    
+    // Agregar path completo de imagen.
+    //texture = LoadTexture("/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world-map.jpg");
     
     // register callbacks
     glutDisplayFunc(renderScene);
