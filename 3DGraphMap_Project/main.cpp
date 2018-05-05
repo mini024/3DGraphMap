@@ -17,7 +17,6 @@
 #include <math.h>
 #include <sys/time.h>
 #include "Planet.h"
-#include "SOIL.h"
 
 #include "imgui.h"
 #include "imgui_impl_glut.h"
@@ -57,6 +56,9 @@ float deltaMoveY = 0;
 
 // Image
 GLuint texture;
+
+// variable to store planet (global)
+Planet earth;
 
 void changeSize(int w, int h) {
     
@@ -173,27 +175,27 @@ GLuint LoadTexture( const char * filename )
         return 0;
     }
     
-    // allocate buffer
-    data = (unsigned char*) malloc(width * height * 4);
+    // seek through the bmp header, up to the width/height:
+    fseek(file, 18, SEEK_CUR);
     
-    //read texture data
-    fread(data, width * height * 4, 1, file);
-    fclose(file);
+    width = 1200;
+    height = 715;
+    data = (unsigned char *)malloc( width * height * 3);
     
+    //int size = fseek(file,);
+    fread( data, width * height * 3, 1, file );
+    fseek(file, 24, SEEK_CUR);
+    fclose( file );
     
-    texture = SOIL_load_OGL_texture // load an image file directly as a new OpenGL texture
-    (
-     "/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world-map.jpg",
-     SOIL_LOAD_AUTO,
-     SOIL_CREATE_NEW_ID,
-     SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-     );
-    
-    
-    // check for an error during the load process
-    if(texture == 0)
+    for(int i = 0; i < width * height; ++i)
     {
-        //printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+        int index = i*3;
+        unsigned char B,R;
+        B = data[index];
+        R = data[index+2];
+        
+        data[index] = R;
+        data[index+2] = B;
     }
     
     glGenTextures( 1, &texture );
@@ -278,6 +280,9 @@ void renderScene(void) {
               0.0f, 1.0f,  0.0f);
     glRotatef(90, 1.0, 0.0, 0.0);
     
+    glBindTexture (GL_TEXTURE_2D, texture);
+    glEnable(GL_TEXTURE_2D);
+    
     // Draw ground
     glColor3f(0.9f, 0.9f, 0.9f);
     glBegin(GL_QUADS);
@@ -286,39 +291,21 @@ void renderScene(void) {
     glVertex3f( 100.0f, 0.0f,  100.0f);
     glVertex3f( 100.0f, 0.0f, -100.0f);
     glEnd();
-    
-    glBindTexture (GL_TEXTURE_2D, texture);
-//    glEnable(GL_TEXTURE_2D);
-//    glEnable(GL_TEXTURE_GEN_S);
-//    glEnable(GL_TEXTURE_GEN_T);
-//
-//    // Draw Sphere
-//    glPushMatrix();
-//    glTranslated(-2.4,1.2,-6);
-//    glutSolidSphere(1,16,16);
-//    glPopMatrix();
-//    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 
-//    // variable to store planet (global)
-//    Planet earth;
-//
-//    // init after OpenGL initialisation
-//    earth.init(1.0,"/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world_map.bmp");
-//
-//    // position update
-//    earth.x0=  0.0;
-//    earth.y0=  0.0;
-//    earth.z0=-10.0;
-//
-//    // add this to render loop
-//    earth.draw(); // draws the planet
-//    earth.t+=2.5; // just rotate planet by 2.5 deg each frame...
+    // init after OpenGL initialisation
+    earth.init(1.0,"/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world_map.bmp");
 
-    
-    
-    
+    // position update
+    earth.x0=  0.0;
+    earth.y0=  0.0;
+    earth.z0= -10.0;
+
+    // add this to render loop
+    earth.draw(); // draws the planet
+    //earth.t+=2.5; // just rotate planet by 2.5 deg each frame...
+
     // Draw Cubes
-    
     for(int i = -3; i < 3; i++)
         for(int j=-3; j < 3; j++) {
             glPushMatrix();
@@ -369,7 +356,7 @@ int main(int argc, char **argv) {
     glutWindowId = glutGetWindow();
     
     // Agregar path completo de imagen.
-    //texture = LoadTexture("/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world-map.jpg");
+    texture = LoadTexture("/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world_map.bmp");
     
     // register callbacks
     glutDisplayFunc(renderScene);

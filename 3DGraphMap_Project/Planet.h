@@ -75,17 +75,18 @@ void Planet::init(GLfloat r,const char * texture)
         // seek through the bmp header, up to the width/height:
         fseek(file, 18, SEEK_CUR);
         
-        xs = 16200;
-        ys = 8100;
+        xs = 1620;
+        ys = 810;
         
-        txr = new int[xs*ys*3];
+        txr = new int[xs*ys*100];
+        fseek(file, 24, SEEK_CUR);
         
-        fread( txr, xs * ys * 3, 1, file );
+        fread( txr, xs * ys * 100, 1, file );
         fclose(file);
         
         for(int i = 0; i < xs * ys; ++i)
         {
-            int index = i*3;
+            int index = i*100;
             unsigned char B,R;
             B = txr[index];
             R = txr[index+2];
@@ -113,12 +114,13 @@ void Planet::init(GLfloat r,const char * texture)
         tdx*=GLfloat(xs-2)/GLfloat(xs);
         tdy*=GLfloat(ys-2)/GLfloat(ys);
     }
+    
     // correct texture coordinate system (invert x)
     tx0=1.0-tx0; tdx=-tdx;
     
     da=(2.0*M_PI)/GLfloat(na-1);
     db=     M_PI /GLfloat(nb-1);
-    for (ib=0,b=-0.5*M_PI;ib<nb;ib++,b+=db)
+    for (ib=0,b=-0.5*M_PI;ib<nb;ib++,b+=db) {
         for (ia=0,a= 0.0     ;ia<na;ia++,a+=da)
         {
             x=cos(b)*cos(a);
@@ -133,6 +135,7 @@ void Planet::init(GLfloat r,const char * texture)
             txr[ia][ib][0]=tx0+(a*tdx);
             txr[ia][ib][1]=ty0+(b*tdy);
         }
+    }
 }
 void Planet::draw()
 {
@@ -144,10 +147,11 @@ void Planet::draw()
     glTranslatef(x0,y0,z0);
     glRotatef(90.0,1.0,0.0,0.0); // rotate planets z axis (North) to OpenGL y axis (Up)
     glRotatef(-t,0.0,0.0,1.0); // rotate planets z axis (North) to OpenGL y axis (Up)
-    
+
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D,txrid);
     glColor3f(1.0,1.0,1.0);
+    
     for (ib0=0,ib1=1;ib1<nb;ib0=ib1,ib1++)
     {
         glBegin(GL_QUAD_STRIP);
@@ -156,6 +160,7 @@ void Planet::draw()
             glNormal3fv  (nor[ia][ib0]);
             glTexCoord2fv(txr[ia][ib0]);
             glVertex3fv  (pos[ia][ib0]);
+            
             glNormal3fv  (nor[ia][ib1]);
             glTexCoord2fv(txr[ia][ib1]);
             glVertex3fv  (pos[ia][ib1]);
@@ -165,6 +170,7 @@ void Planet::draw()
     glDisable(GL_TEXTURE_2D);
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
+
 }
 //---------------------------------------------------------------------------
 
