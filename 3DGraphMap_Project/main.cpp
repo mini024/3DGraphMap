@@ -16,6 +16,7 @@
 #include <GLUT/glut.h>
 #include <math.h>
 #include <sys/time.h>
+#include <vector>
 #include "Planet.h"
 
 #include "imgui.h"
@@ -56,6 +57,14 @@ float deltaMoveY = 0;
 
 // Image
 GLuint texture;
+GLUquadric *textureObj;
+
+//VAO-Vertex Array Object
+//VBO-Vertex Buffer Object
+//EBO-Element Buffer Object
+unsigned int VBO;
+unsigned int VAO;
+unsigned int EBO;
 
 // variable to store planet (global)
 Planet earth;
@@ -160,61 +169,67 @@ void computeDir(float deltaAngle) {
     lz = -cos(angle);
 }
 
-GLuint LoadTexture( const char * filename )
+GLuint loadTexture( const char * filename)
 {
-    unsigned long width, height;
-    
+    // Data read from the header of the BMP file
+    unsigned char header[54]; // Each BMP file begins by a 54-bytes header
+    unsigned int dataPos;     // Position in the file where the actual data begins
+    unsigned int width, height;
+    unsigned int imageSize;   // = width*height*3
+    // Actual RGB data
     unsigned char * data;
     
-    FILE * file;
+    // Open the file
+    FILE * file = fopen(filename,"rb");
+    if (!file){printf("Image could not be opened\n"); return 0;}
     
-    file = fopen( filename, "rb" );
+    if ( fread(header, 1, 54, file)!=54 ){ // If not 54 bytes read : problem
+        printf("Not a correct BMP file\n");
+        return false;
+    }
     
-    if ( file == NULL ) {
-        printf("HEllo");
+    if ( header[0]!='B' || header[1]!='M' ){
+        printf("Not a correct BMP file\n");
         return 0;
     }
     
-    // seek through the bmp header, up to the width/height:
-    fseek(file, 18, SEEK_CUR);
+    // Read ints from the byte array
+    dataPos    = *(int*)&(header[0x0A]);
+    imageSize  = *(int*)&(header[0x22]);
+    width      = *(int*)&(header[0x12]);
+    height     = *(int*)&(header[0x16]);
     
-    width = 1200;
-    height = 715;
-    data = (unsigned char *)malloc( width * height * 3);
+    // Some BMP files are misformatted, guess missing information
+    if (imageSize==0)    imageSize=width*height*3; // 3 : one byte for each Red, Green and Blue component
+    if (dataPos==0)      dataPos=54; // The BMP header is done that way
     
-    //int size = fseek(file,);
-    fread( data, width * height * 3, 1, file );
-    fseek(file, 24, SEEK_CUR);
-    fclose( file );
+    // Create a buffer
+    data = new unsigned char [imageSize];
     
-    for(int i = 0; i < width * height; ++i)
-    {
-        int index = i*3;
-        unsigned char B,R;
-        B = data[index];
-        R = data[index+2];
-        
-        data[index] = R;
-        data[index+2] = B;
-    }
+    // Read the actual data from the file into the buffer
+    fread(data,1,imageSize,file);
     
-    glGenTextures( 1, &texture );
-    glBindTexture( GL_TEXTURE_2D, texture );
+    //Everything is in memory now, the file can be closed
+    fclose(file);
     
-    // The next commands sets the texture parameters
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // If the u,v coordinates overflow the range 0,1 the image is repeated
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // The magnification function ("linear" produces better results)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST); //The minifying function
+    // Create one OpenGL texture
+    GLuint textureID;
+    glGenTextures(1, &textureID);
     
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    // "Bind" the newly created texture : all future texture functions will modify this texture
+    glBindTexture(GL_TEXTURE_2D, textureID);
     
-    glTexImage2D( GL_TEXTURE_2D,0, 3, width, height,0,GL_RGB, GL_UNSIGNED_BYTE, data );
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+    // Give the image to OpenGL
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
     
-    free(data);
+    // When MAGnifying the image (no bigger mipmap available), use LINEAR filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // When MINifying the image, use a LINEAR blend of two mipmaps, each filtered LINEARLY too
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    // Generate mipmaps, by the way.
+    glGenerateMipmap(GL_TEXTURE_2D);
     
-    return texture;
+    return textureID;
 }
 
 void DoGUI(){
@@ -259,7 +274,6 @@ void DoGUI(){
     firstRun = false;
 }
 
-
 void renderScene(void) {
     
     if (deltaMove)
@@ -279,31 +293,18 @@ void renderScene(void) {
               x+lx, 10.0f,  z+lz,
               0.0f, 1.0f,  0.0f);
     glRotatef(90, 1.0, 0.0, 0.0);
-    
-    glBindTexture (GL_TEXTURE_2D, texture);
-    glEnable(GL_TEXTURE_2D);
-    
-    // Draw ground
-    glColor3f(0.9f, 0.9f, 0.9f);
-    glBegin(GL_QUADS);
-    glVertex3f(-100.0f, 0.0f, -100.0f);
-    glVertex3f(-100.0f, 0.0f,  100.0f);
-    glVertex3f( 100.0f, 0.0f,  100.0f);
-    glVertex3f( 100.0f, 0.0f, -100.0f);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
 
     // init after OpenGL initialisation
-    earth.init(1.0,"/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world_map.bmp");
+    earth.init(10.0,"/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world_map.bmp");
 
     // position update
     earth.x0=  0.0;
     earth.y0=  0.0;
-    earth.z0= -10.0;
+    earth.z0= -30.0;
 
     // add this to render loop
     earth.draw(); // draws the planet
-    //earth.t+=2.5; // just rotate planet by 2.5 deg each frame...
+    earth.t+=0.5; // just rotate planet by 2.5 deg each frame...
 
     // Draw Cubes
     for(int i = -3; i < 3; i++)
@@ -344,7 +345,6 @@ void releaseKey(int key, int x, int y) {
 //Global Variables
 static int glutWindowId = 0;
 
-
 int main(int argc, char **argv) {
     // init GLUT and create window
     glutInit(&argc, argv);
@@ -354,9 +354,6 @@ int main(int argc, char **argv) {
     glutCreateWindow("Lighthouse3D - GLUT Tutorial");
     
     glutWindowId = glutGetWindow();
-    
-    // Agregar path completo de imagen.
-    texture = LoadTexture("/Users/jessicamcavazoserhard/Documents/ITC/8 semestre/Graficas/OpenGL/3DGraphMap_Project/3DGraphMap_Project/world_map.bmp");
     
     // register callbacks
     glutDisplayFunc(renderScene);

@@ -18,8 +18,6 @@
 #include <iostream>
 #include <string>
 
-//#include "bitmap_image.hpp"
-
 using namespace std;
 
 //---------------------------------------------------------------------------
@@ -56,12 +54,11 @@ void Planet::init(GLfloat r,const char * texture)
     tdy=1.0/M_PI;
     
     // load texture to GPU memory
-    if (texture!="")
-    {
-        char q;
-        unsigned int *pp;
-        int xs,ys,x,y,adr,*txr;
-        union { unsigned int c32; char db[4]; } c;
+    if (texture != "") {
+        //char q;
+        //unsigned int *pp;
+        int xs,ys,*txr;
+        //union { unsigned int c32; char db[4]; } c;
         
         FILE * file;
         
@@ -75,18 +72,18 @@ void Planet::init(GLfloat r,const char * texture)
         // seek through the bmp header, up to the width/height:
         fseek(file, 18, SEEK_CUR);
         
-        xs = 1620;
-        ys = 810;
+        xs = 1024;
+        ys = 512;
         
-        txr = new int[xs*ys*100];
+        txr = new int[xs*ys*7];
         fseek(file, 24, SEEK_CUR);
         
-        fread( txr, xs * ys * 100, 1, file );
+        fread( txr, xs * ys * 7, 1, file );
         fclose(file);
         
         for(int i = 0; i < xs * ys; ++i)
         {
-            int index = i*100;
+            int index = i*7;
             unsigned char B,R;
             B = txr[index];
             R = txr[index+2];
