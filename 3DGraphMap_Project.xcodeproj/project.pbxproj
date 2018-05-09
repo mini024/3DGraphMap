@@ -33,7 +33,6 @@
 		1A25B16820910502009A3E37 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1A25B1702091050B009A3E37 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		1A25B17220910511009A3E37 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		1A25B17420910522009A3E37 /* world-map.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = "world-map.bmp"; sourceTree = "<group>"; };
 		6B60F7252099F9B500B1FD1E /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
 		6B60F7262099F9BE00B1FD1E /* imgui_impl_glut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_glut.cpp; sourceTree = "<group>"; };
 		6B60F7272099F9BE00B1FD1E /* imgui_impl_glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_impl_glut.h; sourceTree = "<group>"; };
@@ -46,6 +45,8 @@
 		6B60F7302099FA0200B1FD1E /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
 		6B9AE6B620A230EF00CA6F52 /* GraphicBar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicBar.cpp; path = Objects/GraphicBar.cpp; sourceTree = "<group>"; };
 		6B9AE6B720A230EF00CA6F52 /* GraphicBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GraphicBar.h; path = Objects/GraphicBar.h; sourceTree = "<group>"; };
+		6B9AE6BB20A28C5900CA6F52 /* Planet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Planet.h; sourceTree = "<group>"; };
+		6B9AE6BC20A2951800CA6F52 /* world_map.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = world_map.bmp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 		1A25B16720910502009A3E37 /* 3DGraphMap_Project */ = {
 			isa = PBXGroup;
 			children = (
+				6B9AE6BB20A28C5900CA6F52 /* Planet.h */,
 				6B60F7302099FA0200B1FD1E /* imconfig.h */,
 				6B60F72E2099FA0100B1FD1E /* imgui_draw.cpp */,
 				6B60F72D2099FA0100B1FD1E /* imgui_internal.h */,
@@ -91,7 +93,7 @@
 				6B60F7272099F9BE00B1FD1E /* imgui_impl_glut.h */,
 				6B60F7282099F9BE00B1FD1E /* imgui.cpp */,
 				6B60F7252099F9B500B1FD1E /* imgui.h */,
-				1A25B17420910522009A3E37 /* world-map.bmp */,
+				6B9AE6BC20A2951800CA6F52 /* world_map.bmp */,
 				1A25B16820910502009A3E37 /* main.cpp */,
 				6B9AE6B620A230EF00CA6F52 /* GraphicBar.cpp */,
 				6B9AE6B720A230EF00CA6F52 /* GraphicBar.h */,
