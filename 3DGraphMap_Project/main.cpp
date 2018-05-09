@@ -356,22 +356,22 @@ void getPointFromLatandLong(float latitude,float longitude ,char city){
     
     switch (city) {
         case '1':
-            graphics[0].SetPos(X-2,Y-9, Z);
+            graphics[0].SetPos(X-3.5,Y-9.9, Z);
             graphics[0].SetHeight(15.5f);
             drawCube(graphics[0]); //dubai
             break;
         case '2':
-            graphics[1].SetPos(X, Y-12.2, Z);
+            graphics[1].SetPos(X-2-2, Y-5.2, Z);
             graphics[1].SetHeight(15.5f);
             drawCube(graphics[1]); //moscow
             break;
         case '3':
-            graphics[2].SetPos(X-1.3, Y-13.2, Z);
+            graphics[2].SetPos(X+2.7, Y-8.002, Z);
             graphics[2].SetHeight(15.5f);
             drawCube(graphics[2]); //seoul
             break;
         case '4':
-            graphics[3].SetPos(X+1.1, Y-14.6, Z);
+            graphics[3].SetPos(X+1.8, Y-13.9, Z);
             graphics[3].SetHeight(15.5f);
             drawCube(graphics[3]); //singapore
             break;
@@ -410,8 +410,8 @@ void changeSize(int w, int h) {
 
 void drawCube(GraphicBar Bar)
 {
-    const float sizex = 0.2f;
-    const float sizey = 0.2f;
+    const float sizex = 0.05f;
+    const float sizey = 0.05f;
     const float sizez = Bar.GetHeight();
     float x = Bar.GetPosX();
     float y = Bar.GetPosY();
