@@ -239,10 +239,10 @@ void renderScene(void) {
     earth.draw(); // draws the planet
     earth.t +=target[0];
     
-//    getPointFromLatandLong(37.566667,126.966667,'3'); //Seoul
-//    getPointFromLatandLong(55.75,37.616667,'2'); //Moscow
+    getPointFromLatandLong(37.566667,126.966667,'3'); //Seoul
+    getPointFromLatandLong(55.75,37.616667,'2'); //Moscow
     getPointFromLatandLong(25.263056,55.297222,'1'); //Dubai
-//    getPointFromLatandLong(1.283333,103.833333,'4'); //Singapore
+    getPointFromLatandLong(1.283333,103.833333,'4'); //Singapore
     
     //glEnable(GL_LIGHTING);
     if(sphereVisible){
@@ -354,16 +354,16 @@ void getPointFromLatandLong(float latitude,float longitude ,char city){
     
     switch (city) {
         case '1':
-            drawCube(X-2, Y-9, Z, 15.5); //dubai
+            drawCube(X-3.5, Y-9.9, Z, 15.5); //dubai
             break;
         case '2':
-            drawCube(X, Y-12.2, Z, 15.5); //moscow
+            drawCube(X-2.2, Y-5.2, Z, 15.5); //moscow
             break;
         case '3':
-            drawCube(X-1.3, Y-13.2, Z, 15.5); //seoul
+            drawCube(X+2.7, Y-8.002, Z, 15.5); //seoul
             break;
         case '4':
-            drawCube(X+1.1, Y-14.6, Z, 15.5); //singapore
+            drawCube(X+1.8, Y-13.9, Z, 15.5); //singapore
             break;
             
         default:
@@ -400,8 +400,8 @@ void changeSize(int w, int h) {
 
 void drawCube(float x, float y, float z, float h)
 {
-    const float sizex = 0.2f;
-    const float sizey = 0.2f;
+    const float sizex = 0.05f;
+    const float sizey = 0.05f;
     const float sizez = h;
     
     glTranslatef(-x, -y, -z);
