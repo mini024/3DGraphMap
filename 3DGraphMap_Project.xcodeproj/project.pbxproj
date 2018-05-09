@@ -13,6 +13,7 @@
 		6B60F7292099F9BE00B1FD1E /* imgui_impl_glut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B60F7262099F9BE00B1FD1E /* imgui_impl_glut.cpp */; };
 		6B60F72A2099F9BE00B1FD1E /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B60F7282099F9BE00B1FD1E /* imgui.cpp */; };
 		6B60F7312099FA0200B1FD1E /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B60F72E2099FA0100B1FD1E /* imgui_draw.cpp */; };
+		6B9AE6B820A230EF00CA6F52 /* GraphicBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B9AE6B620A230EF00CA6F52 /* GraphicBar.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +44,8 @@
 		6B60F72E2099FA0100B1FD1E /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
 		6B60F72F2099FA0100B1FD1E /* stb_rect_pack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_rect_pack.h; sourceTree = "<group>"; };
 		6B60F7302099FA0200B1FD1E /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
+		6B9AE6B620A230EF00CA6F52 /* GraphicBar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicBar.cpp; path = Objects/GraphicBar.cpp; sourceTree = "<group>"; };
+		6B9AE6B720A230EF00CA6F52 /* GraphicBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GraphicBar.h; path = Objects/GraphicBar.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				6B60F7252099F9B500B1FD1E /* imgui.h */,
 				1A25B17420910522009A3E37 /* world-map.bmp */,
 				1A25B16820910502009A3E37 /* main.cpp */,
+				6B9AE6B620A230EF00CA6F52 /* GraphicBar.cpp */,
+				6B9AE6B720A230EF00CA6F52 /* GraphicBar.h */,
 			);
 			path = 3DGraphMap_Project;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 			files = (
 				6B60F7292099F9BE00B1FD1E /* imgui_impl_glut.cpp in Sources */,
 				6B60F7312099FA0200B1FD1E /* imgui_draw.cpp in Sources */,
+				6B9AE6B820A230EF00CA6F52 /* GraphicBar.cpp in Sources */,
 				1A25B16920910502009A3E37 /* main.cpp in Sources */,
 				6B60F72A2099F9BE00B1FD1E /* imgui.cpp in Sources */,
 			);

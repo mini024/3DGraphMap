@@ -20,9 +20,11 @@
 #include "imgui.h"
 #include "imgui_impl_glut.h"
 
+#include "GraphicBar.h"
+
 #define WINFOW_TITLE    "Lightin demo"
-#define WINDOW_WIDTH    800
-#define WINDOW_HEIGHT   600
+#define WINDOW_WIDTH    1024
+#define WINDOW_HEIGHT   780
 #define UPDATE_TIME     17 /* ((1 / 60) * 1000) rounded up */
 #define X .525731112119133606
 #define Z .850650808352039932
@@ -33,11 +35,13 @@ void DoGUI();
 void LoadTexture();
 void renderScene(); //display();
 void updateTimer(int windowId);
-void drawCube(float x, float y, float z);
-void reshape(int width, int heigth); //windowSize();
+void drawCube(float x, float y, float z, float h);
+void reshape(int width, int height); //windowSize();
 void computePos(float deltaMove);
 void computePosY(float deltaMove);
 void computeDir(float deltaAngle);
+void createGraphicBars();
+GraphicBar graphics[36] = {};
 
 void keyDown(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);
@@ -52,6 +56,7 @@ void (*activeReshape)(int,int) = reshapePerspective;
 
 double GetMilliseconds();
 void Normalize(GLfloat *a);
+
 // DrawTriangle(GLfloat *a, GLfloat *b, GLfloat *c, int div, float r);
 //void DrawSphere(int ndiv, float radius=1.0);
 //void DrawPlane(int subdiv);
@@ -73,19 +78,6 @@ static double prevTime = 0.0;
 static float rotation = 270.0f;
 static int glutWindowId = 0;
 
-struct Coordinate {
-    float latitude;
-    float longitude;
-};
-
-Coordinate coord1{ 10.0f,-10.0f };
-
-struct MapPoints {
-    int color;
-    int heigth;
-};
-
-Coordinate dataPoints[] = {};
 
 int main(int argc, char **argv) {
     // init GLUT and create window
@@ -121,13 +113,6 @@ int main(int argc, char **argv) {
     prevTime = GetMilliseconds();
     glutMainLoop();
     
-    // OpenGL init
-    //glEnable(GL_DEPTH_TEST);
-    
-    //ImGui_ImplGLUT_Init();
-    // enter GLUT event processing cycle
-    //glutMainLoop();
-    
     return 0;
 }
 
@@ -137,8 +122,8 @@ void Shutdown() {
 
 float diffuseColor[] = {1.0f, 0.0f, 0.0f, 1.0f};
 float lightDirection[] = {2.0f, 2.0f, 2.0f, 1.0f};
-float eyePos[] = {0.0f, 5.0f, 0.0f};
-float target[] = {0.0f, 1.0f, 1.0f};
+float eyePos[] = {20.0f, 5.0f, -94.0f};
+float target[] = {66.0f, 1.0f, 491.0f};
 bool rotateModel = false;
 float attenC = 1.0f;
 float attenL = 0.0f;
@@ -152,22 +137,21 @@ bool sphereVisible = true;
 float sphereScale[] = {1.0f, 1.0f, 1.0f};
 float sphereTranslate[] = {0.0f, 3.0f, 0.0f};
 
-
 // angle of rotation for the camera direction
 float angle = 0.0f;
 // actual vector representing the camera's direction
 // the key states. These variables will be zero
 //when no key is being presses
 float deltaAngle = 0.0f;
-float deltaMove = 0;
-float deltaMoveY = 0;
+float deltaMove = 0.0f;
+float deltaMoveY = 0.0f;
 
 void Initialize() {
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     
     glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_CULL_FACE); // TODO: Enable?
+    glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
     glBlendEquation(GL_FUNC_ADD);
@@ -219,13 +203,10 @@ void renderScene(void) {
        computeDir(deltaAngle);
     
     // Clear Color and Depth Buffers
-    glClearColor(0.5f, 0.6f, 0.7f, 0.0f);
+    glClearColor(0.07f, 0.63f, 0.88f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glPushMatrix();
-    
-    //gluLookAt(eyePos[0], eyePos[1], eyePos[2], target[0], target[1], target[2], 0.0f, 1.0f, 0.0f);
-    
-    //glRotatef(90, 1.0, 0.0, 0.0);
+
     
     // Reset transformations
     glLoadIdentity();
@@ -243,37 +224,58 @@ void renderScene(void) {
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, attenL);
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, attenQ);
     
-    // Image
-    //GLuint texture;
-    // Agregar path completo de imagen.
-    //texture = LoadTexture("~/3DGraphMap_Project/3DGraphMap_Project/world-map.bmp");
-    //glBindTexture (GL_TEXTURE_2D, texture);
-    //glEnable(GL_TEXTURE_2D);
-    
-    // Draw ground
-//    if(planeVisible) {
-//        glPushMatrix();
-//        glColor3f(0.9f, 0.9f, 0.9f);
-//        glBegin(GL_QUADS);
-//        glVertex3f(-100.0f, 0.0f, -100.0f);
-//        glVertex3f(-100.0f, 0.0f,  100.0f);
-//        glVertex3f( 100.0f, 0.0f,  100.0f);
-//        glVertex3f( 100.0f, 0.0f, -100.0f);
-//        glEnd();
-//        glPopMatrix();
-//
-//    }
-   
-    
-    // Draw Cubes
-    
     if(sphereVisible){
-    
-    for(int i = -3; i < 3; i++)
-        for(int j=-3; j < 3; j++) {
+
+        for (int i=0; i<10; i++){
+            graphics[i].SetHeight(i+2.0f);
+        }
+        
+        graphics[0].SetPos(-3.0f,-6.0f);
+        graphics[1].SetPos(-3.0f,-3.0f);
+        graphics[2].SetPos(-3.0f,-1.0f);
+        graphics[3].SetPos(-3.0f,2.0f);
+        graphics[4].SetPos(-3.0f,4.0f);
+        graphics[5].SetPos(-3.0f,6.0f);
+        
+        graphics[6].SetPos(-2.0f,-3.0f);
+        graphics[7].SetPos(-2.0f,-2.0f);
+        graphics[8].SetPos(-2.0f,-1.0f);
+        graphics[9].SetPos(-2.0f,0.0f);
+        graphics[10].SetPos(-2.0f,1.0f);
+        graphics[11].SetPos(-2.0f,2.0f);
+        
+        graphics[12].SetPos(-1.0f,-3.0f);
+        graphics[13].SetPos(-1.0f,-2.0f);
+        graphics[14].SetPos(-1.0f,-1.0f);
+        graphics[15].SetPos(-1.0f,0.0f);
+        graphics[16].SetPos(-1.0f,1.0f);
+        graphics[17].SetPos(-1.0f,2.0f);
+        
+        graphics[18].SetPos(0.0f,-3.0f);
+        graphics[19].SetPos(0.0f,-2.0f);
+        graphics[20].SetPos(0.0f,-1.0f);
+        graphics[21].SetPos(0.0f,0.0f);
+        graphics[22].SetPos(0.0f,1.0f);
+        graphics[23].SetPos(0.0f,2.0f);
+        
+        graphics[24].SetPos(1.0f,-3.0f);
+        graphics[25].SetPos(1.0f,-2.0f);
+        graphics[26].SetPos(1.0f,-1.0f);
+        graphics[27].SetPos(1.0f,0.0f);
+        graphics[28].SetPos(1.0f,1.0f);
+        graphics[29].SetPos(1.0f,2.0f);
+        
+        graphics[30].SetPos(2.0f,-3.0f);
+        graphics[31].SetPos(2.0f,-2.0f);
+        graphics[32].SetPos(2.0f,-1.0f);
+        graphics[33].SetPos(2.0f,0.0f);
+        graphics[34].SetPos(2.0f,1.0f);
+        graphics[35].SetPos(2.0f,2.0f);
+        
+        for (int i=0; i<10; i++){
             glPushMatrix();
-            glTranslatef(i*10.0,0,j * 10.0);
-            drawCube(0.0,0.0,0.0);
+            glTranslatef(i*10.0, 0,0);
+            drawCube(graphics[i].GetPosX(), graphics[i].GetPosY(), 0.0f, graphics[i].GetHeight());
             glPopMatrix();
         }
     
@@ -333,11 +335,11 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void drawCube(float x, float y, float z)
+void drawCube(float x, float y, float z, float h)
 {
-    const float sizex = 0.5f;
-    const float sizey = 0.5f;
-    const float sizez = 0.5f;
+    const float sizex = 1.0f;
+    const float sizey = 1.0f;
+    const float sizez = h;
     
     glTranslatef(-x, -y, -z);
     
@@ -457,14 +459,16 @@ GLuint LoadTexture( const char * filename )
 
 void DoGUI(){
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize |
-    ImGuiWindowFlags_NoCollapse;
+                                    ImGuiWindowFlags_NoCollapse |
+                                    ImGuiWindowFlags_NoMove;
+    
+    ImGuiWindowFlags window_data_flags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
     
     glDisable(GL_LIGHTING);
     
     ImGui_ImplGLUT_NewFrame((int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y, 1.0f / 60.0f);
     
     static bool showLightConfig = true;
-    static bool showAppConfig = true;
     static bool firstRun = true;
     static bool showDataConfig = true;
     
@@ -476,36 +480,54 @@ void DoGUI(){
     ImGui::Begin("Camera", &showLightConfig, window_flags);
     ImGui::DragFloat3("Eye Position", eyePos, 0.25f);
     ImGui::DragFloat3("Target", target, 0.25f);
-    ImGui::Checkbox("Rotate View", &rotateModel);
+    //ImGui::Checkbox("Rotate View", &rotateModel);
     ImGui::End();
+    
+//    if (firstRun) {
+//        ImGui::SetNextWindowPos(ImVec2(670,10));
+//        ImGui::SetNextWindowSize(ImVec2(120,80));
+//    }
+//
+//    ImGui::Begin("Application", &showAppConfig, window_flags);
+//        if (ImGui::Button("Quit")) {
+//            exit(0);
+//        }
+//        if (ImGui::Button("Reset")) {
+//            exit(0);
+//        }
+//    ImGui::End();
     
     if (firstRun) {
-        ImGui::SetNextWindowPos(ImVec2(670,10));
-        ImGui::SetNextWindowSize(ImVec2(120,80));
+        ImGui::SetNextWindowPos(ImVec2(300,5));
+        ImGui::SetNextWindowSize(ImVec2(500,400));
     }
+    //static float color[4] = { 0.4f,0.7f,0.0f,0.5f };
     
-    ImGui::Begin("Application", &showAppConfig, window_flags);
+    ImGui::Begin("Dataset", &showDataConfig, window_data_flags);
+    ImGui::Columns(4, "mycolumns"); // 4-ways, with border
+    ImGui::Separator();
+    ImGui::Text("Latitude"); ImGui::NextColumn();
+    ImGui::Text("Longitude"); ImGui::NextColumn();
+    ImGui::Text("Height"); ImGui::NextColumn();
+    ImGui::Text("Color"); ImGui::NextColumn();
+    ImGui::Separator();
     
-    if (ImGui::Button("Quit")) {
-        exit(0);
+    for (int i = 0; i < 20; i++)
+    {
+        float latitude = graphics[i].GetPosX();
+        float longitude = graphics[i].GetPosY();
+        float size = graphics[i].GetHeight();
+        
+        float color[4] = {graphics[i].GetColorR(), graphics[i].GetColorG(), graphics[i].GetColorB(), graphics[i].GetColorA()};
+        
+        ImGui::DragFloat("", &latitude); ImGui::NextColumn();
+        ImGui::DragFloat("", &longitude); ImGui::NextColumn();
+        ImGui::DragFloat("", &size); ImGui::NextColumn();
+        ImGui::ColorEdit3("", color); ImGui::NextColumn();
     }
-    if (ImGui::Button("Reset")) {
-        exit(0);
-    }
+    ImGui::Separator();
     ImGui::End();
-    
-    if (firstRun) {
-        ImGui::SetNextWindowPos(ImVec2(400,200));
-        ImGui::SetNextWindowSize(ImVec2(330,200));
-    }
-    
-    ImGui::Begin("Data", &showDataConfig, window_flags);
-    
-    ImGui::InputFloat2("Coordinate", &coord1.latitude);
-    
-    ImGui::End();
-    
-    
+   
     glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
     ImGui::Render();
     glEnable(GL_LIGHTING);
@@ -567,9 +589,9 @@ void keyDown(unsigned char key, int x, int y) {
 
 void keyUp(unsigned char key, int x, int y) {
     ImGuiIO& io = ImGui::GetIO();
-    //unsigned char keys[] = { key, '\0'};
-    //io.AddInputCharactersUTF8((const char*)keys);
-    io.AddInputCharacter(key);
+    unsigned char keys[] = { key, '\0'};
+    io.AddInputCharactersUTF8((const char*)keys);
+    //io.AddInputCharacter(key);
     io.MousePos = ImVec2((float)x, (float)y);
 }
 
@@ -679,7 +701,7 @@ void DrawTriangle(GLfloat *a, GLfloat *b, GLfloat *c, int div, float r) {
         DrawTriangle(a, ab, ac, div-1, r);
         DrawTriangle(b, bc, ab, div-1, r);
         DrawTriangle(c, ac, bc, div-1, r);
-        DrawTriangle(ab, bc, ac, div-1, r);  //<--Comment this line and sphere looks really cool!
+        //DrawTriangle(ab, bc, ac, div-1, r);  // <--Comment this line and sphere looks really cool!
     }
 }
 
