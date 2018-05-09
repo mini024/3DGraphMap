@@ -361,7 +361,7 @@ void getPointFromLatandLong(float latitude,float longitude ,char city){
             drawCube(graphics[0]); //dubai
             break;
         case '2':
-            graphics[1].SetPos(X-2.2, Y-5.2, Z);
+            graphics[1].SetPos(X-2-2, Y-5.2, Z);
             graphics[1].SetHeight(15.5f);
             drawCube(graphics[1]); //moscow
             break;
