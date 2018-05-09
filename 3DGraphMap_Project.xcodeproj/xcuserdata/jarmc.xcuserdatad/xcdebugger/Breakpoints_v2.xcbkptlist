@@ -10,28 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGraphMap_Project/main.cpp"
-            timestampString = "547529883.176693"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "571"
-            endingLineNumber = "571"
-            landmarkName = "pressKey(int key, int xx, int yy)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "3DGraphMap_Project/main.cpp"
-            timestampString = "547529883.177475"
+            timestampString = "547539262.673787"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "582"
             endingLineNumber = "582"
-            landmarkName = "releaseKey(int key, int x, int y)"
+            landmarkName = "updateTimer(int windowId)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGraphMap_Project/main.cpp"
-            timestampString = "547529883.177966"
+            timestampString = "547539262.674824"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "486"
-            endingLineNumber = "486"
-            landmarkName = "computeDir(float deltaAngle)"
+            startingLineNumber = "593"
+            endingLineNumber = "593"
+            landmarkName = "updateTimer(int windowId)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,12 +42,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "3DGraphMap_Project/main.cpp"
-            timestampString = "547529883.178556"
+            timestampString = "547539262.6758"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "474"
-            endingLineNumber = "474"
-            landmarkName = "computePos(float deltaMove)"
+            startingLineNumber = "497"
+            endingLineNumber = "497"
+            landmarkName = "DoGUI()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "3DGraphMap_Project/main.cpp"
+            timestampString = "547539262.6765389"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "485"
+            endingLineNumber = "485"
+            landmarkName = "DoGUI()"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

@@ -20,7 +20,8 @@
 
 GraphicBar::GraphicBar(void){
     xPos = 0.0f;
-    yPos= 0.0f;
+    yPos = 0.0f;
+    zPos = 0.0f;
     height = 2.0f;
     color[0] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     color[1] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -28,9 +29,10 @@ GraphicBar::GraphicBar(void){
     color[3] = 0.0f;
 }
 
-GraphicBar::GraphicBar(float x, float y, float h){
+GraphicBar::GraphicBar(float x, float y, float z, float h){
     xPos = x;
-    yPos= y;
+    yPos = y;
+    zPos = z;
     height = h;
     color[0] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     color[1] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
@@ -43,9 +45,10 @@ GraphicBar::~GraphicBar(void){
 }
 
 // x = latitude and y = longitude
-void GraphicBar::SetPos(float latitude, float longitude){
+void GraphicBar::SetPos(float latitude, float longitude, float zeta){
     xPos = latitude;
     yPos = longitude;
+    zPos = zeta;
 }
 
 void GraphicBar::SetHeight(float h){
@@ -59,6 +62,10 @@ float GraphicBar::GetPosX(){
 
 float GraphicBar::GetPosY(){
     return yPos;
+}
+
+float GraphicBar::GetPosZ(){
+    return zPos;
 }
 
 float GraphicBar::GetHeight(){
