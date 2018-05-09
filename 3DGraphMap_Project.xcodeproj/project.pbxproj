@@ -25,11 +25,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0549FBB920A292AB006653A0 /* Planet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Planet.h; sourceTree = "<group>"; };
+		0549FBBA20A293BC006653A0 /* world_map.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = world_map.bmp; sourceTree = "<group>"; };
 		1A25B16520910502009A3E37 /* 3DGraphMap_Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 3DGraphMap_Project; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A25B16820910502009A3E37 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1A25B1702091050B009A3E37 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		1A25B17220910511009A3E37 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		1A25B17420910522009A3E37 /* world-map.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = "world-map.bmp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +66,8 @@
 		1A25B16720910502009A3E37 /* 3DGraphMap_Project */ = {
 			isa = PBXGroup;
 			children = (
-				1A25B17420910522009A3E37 /* world-map.bmp */,
+				0549FBB920A292AB006653A0 /* Planet.h */,
+				0549FBBA20A293BC006653A0 /* world_map.bmp */,
 				1A25B16820910502009A3E37 /* main.cpp */,
 			);
 			path = 3DGraphMap_Project;
@@ -256,7 +258,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6RBBWM63CX;
+				DEVELOPMENT_TEAM = G62L6445B6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -265,7 +267,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6RBBWM63CX;
+				DEVELOPMENT_TEAM = G62L6445B6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
