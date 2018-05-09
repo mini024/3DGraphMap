@@ -50,7 +50,7 @@ void DoGUI();
 void LoadTexture();
 void renderScene(); //display();
 void updateTimer(int windowId);
-void drawCube(float x, float y, float z, float h);
+void drawCube(GraphicBar Bar);
 void reshape(int width, int height); //windowSize();
 void computePos(float deltaMove);
 void computePosY(float deltaMove);
@@ -239,59 +239,61 @@ void renderScene(void) {
     earth.draw(); // draws the planet
     earth.t +=target[0];
     
-//    getPointFromLatandLong(37.566667,126.966667,'3'); //Seoul
-//    getPointFromLatandLong(55.75,37.616667,'2'); //Moscow
+    getPointFromLatandLong(37.566667,126.966667,'3'); //Seoul
+    getPointFromLatandLong(55.75,37.616667,'2'); //Moscow
     getPointFromLatandLong(25.263056,55.297222,'1'); //Dubai
-//    getPointFromLatandLong(1.283333,103.833333,'4'); //Singapore
+    getPointFromLatandLong(1.283333,103.833333,'4'); //Singapore
     
     //glEnable(GL_LIGHTING);
     if(sphereVisible){
         
-        for (int i=0; i<10; i++){
-            graphics[i].SetHeight(i+2.0f);
-        }
         
-        graphics[0].SetPos(-3.0f,-6.0f);
-        graphics[1].SetPos(-3.0f,-3.0f);
-        graphics[2].SetPos(-3.0f,-1.0f);
-        graphics[3].SetPos(-3.0f,2.0f);
-        graphics[4].SetPos(-3.0f,4.0f);
-        graphics[5].SetPos(-3.0f,6.0f);
         
-        graphics[6].SetPos(-2.0f,-3.0f);
-        graphics[7].SetPos(-2.0f,-2.0f);
-        graphics[8].SetPos(-2.0f,-1.0f);
-        graphics[9].SetPos(-2.0f,0.0f);
-        graphics[10].SetPos(-2.0f,1.0f);
-        graphics[11].SetPos(-2.0f,2.0f);
+//        for (int i=0; i<10; i++){
+//            graphics[i].SetHeight(i+2.0f);
+//        }
         
-        graphics[12].SetPos(-1.0f,-3.0f);
-        graphics[13].SetPos(-1.0f,-2.0f);
-        graphics[14].SetPos(-1.0f,-1.0f);
-        graphics[15].SetPos(-1.0f,0.0f);
-        graphics[16].SetPos(-1.0f,1.0f);
-        graphics[17].SetPos(-1.0f,2.0f);
-        
-        graphics[18].SetPos(0.0f,-3.0f);
-        graphics[19].SetPos(0.0f,-2.0f);
-        graphics[20].SetPos(0.0f,-1.0f);
-        graphics[21].SetPos(0.0f,0.0f);
-        graphics[22].SetPos(0.0f,1.0f);
-        graphics[23].SetPos(0.0f,2.0f);
-        
-        graphics[24].SetPos(1.0f,-3.0f);
-        graphics[25].SetPos(1.0f,-2.0f);
-        graphics[26].SetPos(1.0f,-1.0f);
-        graphics[27].SetPos(1.0f,0.0f);
-        graphics[28].SetPos(1.0f,1.0f);
-        graphics[29].SetPos(1.0f,2.0f);
-        
-        graphics[30].SetPos(2.0f,-3.0f);
-        graphics[31].SetPos(2.0f,-2.0f);
-        graphics[32].SetPos(2.0f,-1.0f);
-        graphics[33].SetPos(2.0f,0.0f);
-        graphics[34].SetPos(2.0f,1.0f);
-        graphics[35].SetPos(2.0f,2.0f);
+//        graphics[0].SetPos(-3.0f,-6.0f, 0.0f);
+//        graphics[1].SetPos(-3.0f,-3.0f, 0.0f);
+//        graphics[2].SetPos(-3.0f,-1.0f, 0.0f);
+//        graphics[3].SetPos(-3.0f,2.0f, 0.0f);
+//        graphics[4].SetPos(-3.0f,4.0f, 0.0f);
+//        graphics[5].SetPos(-3.0f,6.0f, 0.0f);
+//
+//        graphics[6].SetPos(-2.0f,-3.0f, 0.0f);
+//        graphics[7].SetPos(-2.0f,-2.0f, 0.0f);
+//        graphics[8].SetPos(-2.0f,-1.0f, 0.0f);
+//        graphics[9].SetPos(-2.0f,0.0f, 0.0f);
+//        graphics[10].SetPos(-2.0f,1.0f, 0.0f);
+//        graphics[11].SetPos(-2.0f,2.0f, 0.0f);
+//
+//        graphics[12].SetPos(-1.0f,-3.0f, 0.0f);
+//        graphics[13].SetPos(-1.0f,-2.0f, 0.0f);
+//        graphics[14].SetPos(-1.0f,-1.0f, 0.0f);
+//        graphics[15].SetPos(-1.0f,0.0f, 0.0f);
+//        graphics[16].SetPos(-1.0f,1.0f, 0.0f);
+//        graphics[17].SetPos(-1.0f,2.0f, 0.0f);
+//
+//        graphics[18].SetPos(0.0f,-3.0f, 0.0f);
+//        graphics[19].SetPos(0.0f,-2.0f, 0.0f);
+//        graphics[20].SetPos(0.0f,-1.0f, 0.0f);
+//        graphics[21].SetPos(0.0f,0.0f, 0.0f);
+//        graphics[22].SetPos(0.0f,1.0f, 0.0f);
+//        graphics[23].SetPos(0.0f,2.0f, 0.0f);
+//
+//        graphics[24].SetPos(1.0f,-3.0f, 0.0f);
+//        graphics[25].SetPos(1.0f,-2.0f, 0.0f);
+//        graphics[26].SetPos(1.0f,-1.0f, 0.0f);
+//        graphics[27].SetPos(1.0f,0.0f, 0.0f);
+//        graphics[28].SetPos(1.0f,1.0f, 0.0f);
+//        graphics[29].SetPos(1.0f,2.0f, 0.0f);
+//
+//        graphics[30].SetPos(2.0f,-3.0f, 0.0f);
+//        graphics[31].SetPos(2.0f,-2.0f, 0.0f);
+//        graphics[32].SetPos(2.0f,-1.0f, 0.0f);
+//        graphics[33].SetPos(2.0f,0.0f, 0.0f);
+//        graphics[34].SetPos(2.0f,1.0f, 0.0f);
+//        graphics[35].SetPos(2.0f,2.0f, 0.0f);
         
 //        for (int i=0; i<10; i++){
 //            glPushMatrix();
@@ -354,16 +356,24 @@ void getPointFromLatandLong(float latitude,float longitude ,char city){
     
     switch (city) {
         case '1':
-            drawCube(X-2, Y-9, Z, 15.5); //dubai
+            graphics[0].SetPos(X-2,Y-9, Z);
+            graphics[0].SetHeight(15.5f);
+            drawCube(graphics[0]); //dubai
             break;
         case '2':
-            drawCube(X, Y-12.2, Z, 15.5); //moscow
+            graphics[1].SetPos(X, Y-12.2, Z);
+            graphics[1].SetHeight(15.5f);
+            drawCube(graphics[1]); //moscow
             break;
         case '3':
-            drawCube(X-1.3, Y-13.2, Z, 15.5); //seoul
+            graphics[2].SetPos(X-1.3, Y-13.2, Z);
+            graphics[2].SetHeight(15.5f);
+            drawCube(graphics[2]); //seoul
             break;
         case '4':
-            drawCube(X+1.1, Y-14.6, Z, 15.5); //singapore
+            graphics[3].SetPos(X+1.1, Y-14.6, Z);
+            graphics[3].SetHeight(15.5f);
+            drawCube(graphics[3]); //singapore
             break;
             
         default:
@@ -398,17 +408,20 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void drawCube(float x, float y, float z, float h)
+void drawCube(GraphicBar Bar)
 {
     const float sizex = 0.2f;
     const float sizey = 0.2f;
-    const float sizez = h;
+    const float sizez = Bar.GetHeight();
+    float x = Bar.GetPosX();
+    float y = Bar.GetPosY();
+    float z = Bar.GetPosZ();
     
     glTranslatef(-x, -y, -z);
     
     glBegin(GL_QUADS);
     
-    glColor3f(1.0, 1.0, 0.0);
+    glColor4f(Bar.GetColorR(), Bar.GetColorG(), Bar.GetColorB(), Bar.GetColorA());
     
     // FRONT
     glVertex3f(-sizex, -sizey, sizez);
@@ -422,7 +435,6 @@ void drawCube(float x, float y, float z, float h)
     glVertex3f(sizex, sizey, -sizez);
     glVertex3f(sizex, -sizey, -sizez);
     
-    glColor3f(0.0, 1.0, 0.0);
     
     // LEFT
     glVertex3f(-sizex, -sizey, sizez);
@@ -436,7 +448,6 @@ void drawCube(float x, float y, float z, float h)
     glVertex3f(sizex, sizey, sizez);
     glVertex3f(sizex, -sizey, sizez);
     
-    glColor3f(0.0, 0.0, 1.0);
     
     // TOP
     glVertex3f(-sizex, sizey, sizez);
