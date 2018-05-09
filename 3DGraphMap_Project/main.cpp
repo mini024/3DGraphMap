@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
     prevTime = GetMilliseconds();
 
     // init after OpenGL initialisation
-    earth.init(10.0,"/Users/alfonso/Google Drive/ITC 8vo Semestre/Graficas Computacionales/3DGraphMap/3DGraphMap_Project/world_map.bmp");
+    earth.init(10.0,"/Users/jarmc/Development/ITESM/3DGraphMap/3DGraphMap_Project/world_map.bmp");
     
     glutMainLoop();
     
